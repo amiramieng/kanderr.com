@@ -5,7 +5,7 @@
 			    <div class="container row footer-inner">
 			        <div class="col-md-4">
 			            <h3>Index</h3>
-			            <?php //footer_nav(); ?>
+			            <?php  ?>
 			            <h3>Keep In Touch</h3>
 			            <ul class="social-bar">
 			                <li><a href="" title="Facebook"><span class="fab fa-facebook"></span></a></li>
@@ -45,6 +45,7 @@
 			                            Kanderr, please try again.</small>
 			                    </div>
 			                </div>
+			                <input type="hidden" name="action" value="kanderr_contact_me">
 			            </form>
 			        </div>
 

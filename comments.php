@@ -1,4 +1,3 @@
-<?php $support = new Support; ?>
 <div class="comments">
     <?php if (post_password_required()) : ?>
     <p><?php _e( 'Post is password protected. Enter the password to view any comments.', 'html5blank' ); ?></p>

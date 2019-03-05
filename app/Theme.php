@@ -7,14 +7,14 @@ class Theme
 
     private function actionAfterSetup($function)
     {
-        add_action('after_setup_theme', function() use ($function) {
+        add_action('after_setup_theme', function () use ($function) {
             $function();
         });
     }
 
     private function actionEnqueueScripts($function)
     {
-        add_action('wp_enqueue_scripts', function() use ($function){
+        add_action('wp_enqueue_scripts', function () use ($function) {
             $function();
         });
     }
@@ -28,11 +28,14 @@ class Theme
     public function __construct()
     {
         $callback = new Callback;
-        
+
         $this
             // Registers theme support for a given feature.
             ->addSupport('title-tag')
             ->addSupport('custom-logo')
+            ->addSupport('custom_header')
+            ->addSupport('menus')
+            ->addSupport('automatic-feed-links')
             ->addSupport('post-thumbnails')
             ->addSupport('customize-selective-refresh-widgets')
             ->addSupport('html5', [
@@ -67,14 +70,26 @@ class Theme
             ->addFilter('image_send_to_editor', array($callback, 'remove_thumbnail_dimensions'), 10)
             // Removes a function from a specified filter hook.
             ->removeFilter('the_excerpt', 'wpautop')
+            // Removes a function from a specified action hook.
+            ->removeAction('wp_head', 'feed_links_extra', 3) // Display the links to the extra feeds such as category feeds
+            ->removeAction('wp_head', 'feed_links', 2) // Display the links to the general feeds: Post and Comment Feed
+            ->removeAction('wp_head', 'rsd_link') // Display the link to the Really Simple Discovery service endpoint, EditURI link
+            ->removeAction('wp_head', 'wlwmanifest_link') // Display the link to the Windows Live Writer manifest file.
+            ->removeAction('wp_head', 'index_rel_link') // Index link
+            ->removeAction('wp_head', 'parent_post_rel_link', 10, 0) // Prev link
+            ->removeAction('wp_head', 'start_post_rel_link', 10, 0) // Start link
+            ->removeAction('wp_head', 'adjacent_posts_rel_link', 10, 0) // Display relational links for the posts adjacent to the current post.
+            ->removeAction('wp_head', 'wp_generator') // Display the XHTML generator that is generated on the wp_head hook, WP version
+            ->removeAction('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0)
+            ->removeAction('wp_head', 'rel_canonical')
+            ->removeAction('wp_head', 'wp_shortlink_wp_head', 10, 0)
             ;
-
     }
 
     public function addFilter($feature, $callback, $priority = 10, $accepted_args = 1)
     {
-        $this->actionAfterSetup(function() use ($feature, $callback, $priority, $accepted_args) {
-            if ($callback){
+        $this->actionAfterSetup(function () use ($feature, $callback, $priority, $accepted_args) {
+            if ($callback) {
                 add_filter($feature, $callback, $priority, $accepted_args);
             }
         });
@@ -83,18 +98,18 @@ class Theme
 
     public function removeFilter($feature, $callback, $priority = 10)
     {
-        $this->actionAfterSetup(function() use ($feature, $callback, $priority) {
-            if ($callback){
+        $this->actionAfterSetup(function () use ($feature, $callback, $priority) {
+            if ($callback) {
                 remove_filter($feature, $callback, $priority);
             }
         });
         return $this;
     }
-    
+
     public function addSupport($feature, $options = null)
     {
-        $this->actionAfterSetup(function() use ($feature, $options) {
-            if ($options){
+        $this->actionAfterSetup(function () use ($feature, $options) {
+            if ($options) {
                 add_theme_support($feature, $options);
             } else {
                 add_theme_support($feature);
@@ -105,7 +120,7 @@ class Theme
 
     public function removeSupport($feature)
     {
-        $this->actionAfterSetup(function() use ($feature){
+        $this->actionAfterSetup(function () use ($feature) {
             remove_theme_support($feature);
         });
         return $this;
@@ -113,7 +128,7 @@ class Theme
 
     public function loadTextDomain($domain, $path = false)
     {
-        $this->actionAfterSetup(function() use ($domain, $path){
+        $this->actionAfterSetup(function () use ($domain, $path) {
             load_theme_textdomain($domain, $path);
         });
         return $this;
@@ -121,7 +136,7 @@ class Theme
 
     public function addImageSize($name, $width = 0, $height = 0, $crop = false)
     {
-        $this->actionAfterSetup(function() use ($name, $width, $height, $crop){
+        $this->actionAfterSetup(function () use ($name, $width, $height, $crop) {
             add_image_size($name, $width, $height, $crop);
         });
         return $this;
@@ -129,7 +144,7 @@ class Theme
 
     public function removeImageSize($name)
     {
-        $this->actionAfterSetup(function() use ($name){
+        $this->actionAfterSetup(function () use ($name) {
             remove_image_size($name);
         });
         return $this;
@@ -137,7 +152,7 @@ class Theme
 
     public function addStyle($handle, $src = '',  $deps = array(), $ver = false, $media = 'all')
     {
-        $this->actionEnqueueScripts(function() use ($handle, $src, $deps, $ver, $media){
+        $this->actionEnqueueScripts(function () use ($handle, $src, $deps, $ver, $media) {
             wp_enqueue_style($handle,  $src,  $deps, $ver, $media);
         });
         return $this;
@@ -145,7 +160,7 @@ class Theme
 
     public function addScript($handle,  $src = '',  $deps = array(), $ver = false, $in_footer = false)
     {
-        $this->actionEnqueueScripts(function() use ($handle, $src, $deps, $ver, $in_footer){
+        $this->actionEnqueueScripts(function () use ($handle, $src, $deps, $ver, $in_footer) {
             wp_enqueue_script($handle, $src,  $deps, $ver, $in_footer);
         });
         return $this;
@@ -153,9 +168,9 @@ class Theme
 
     public function addCommentScript()
     {
-        $this->actionEnqueueScripts(function(){
-            if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-                wp_enqueue_script( 'comment-reply' );
+        $this->actionEnqueueScripts(function () {
+            if (is_singular() && comments_open() && get_option('thread_comments')) {
+                wp_enqueue_script('comment-reply');
             }
         });
         return $this;
@@ -163,25 +178,25 @@ class Theme
 
     public function removeStyle($handle)
     {
-        $this->actionEnqueueScripts(function() use ($handle){
+        $this->actionEnqueueScripts(function () use ($handle) {
             wp_dequeue_style($handle);
-            wp_deregister_style($handle); 
+            wp_deregister_style($handle);
         });
         return $this;
     }
 
     public function removeScript($handle)
     {
-        $this->actionEnqueueScripts(function() use ($handle){
+        $this->actionEnqueueScripts(function () use ($handle) {
             wp_dequeue_script($handle);
-            wp_deregister_script($handle);   
+            wp_deregister_script($handle);
         });
         return $this;
     }
 
     public function addNavMenus($locations = array())
     {
-        $this->actionAfterSetup(function() use ($locations){
+        $this->actionAfterSetup(function () use ($locations) {
             register_nav_menus($locations);
         });
         return $this;
@@ -189,33 +204,42 @@ class Theme
 
     public function addNavMenu($location, $description)
     {
-        $this->actionAfterSetup(function() use ($location, $description){
+        $this->actionAfterSetup(function () use ($location, $description) {
             register_nav_menu($location, $description);
         });
         return $this;
     }
 
-    public function removeNavMenu($location){
-        $this->actionAfterSetup(function() use ($location){
+    public function removeNavMenu($location)
+    {
+        $this->actionAfterSetup(function () use ($location) {
             unregister_nav_menu($locations);
         });
         return $this;
     }
 
-    public function registerPostType($handle, $args) {
-        $this->actionAfterSetup(function() use ($handle, $args) {
-            register_post_type( $handle, $args );
+    public function registerPostType($handle, $args)
+    {
+        $this->actionAfterSetup(function () use ($handle, $args) {
+            register_post_type($handle, $args);
         });
         return $this;
     }
 
-    public function addAction($feature, $callback, $priority = 10, $accepted_args = 1) {
-        $this->actionAfterSetup(function() use ($feature, $callback, $priority, $accepted_args) {
-            add_action( $feature, $callback, $priority, $accepted_args );
+    public function addAction($feature, $callback, $priority = 10, $accepted_args = 1)
+    {
+        $this->actionAfterSetup(function () use ($feature, $callback, $priority, $accepted_args) {
+            add_action($feature, $callback, $priority, $accepted_args);
         });
         return $this;
     }
-    
+
+    public function removeAction($feature, $callback, $priority = 10)
+    {
+        $this->actionAfterSetup(function () use ($feature, $callback, $priority) {
+            remove_action($feature, $callback, $priority);
+        });
+        return $this;
+    }
 }
-
-?>
+ 

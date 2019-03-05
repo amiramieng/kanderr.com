@@ -11,9 +11,9 @@ class Ajax
 
     public function kanderr_contact_me() {
     
-        $name = wp_strip_all_tags($_POST['name']);
-        $email = wp_strip_all_tags($_POST['email']);
-        $message = wp_strip_all_tags($_POST['message']);
+        $name = sanitize_text_field($_POST['name']);
+        $email = sanitize_text_field($_POST['email']);
+        $message = sanitize_text_field($_POST['message']);
 
         $args = array(
             'post_title' => $name,
@@ -38,12 +38,20 @@ class Ajax
 
             wp_mail($to, $subject, $message, $headers);
 
-            echo $postID;
-        } else {
-            echo 0;
+            $return = array(
+                'status' => 'success',
+                'ID' => $postID
+            );
+            
+            wp_send_json($return);
+            wp_die();
         }
 
-        die();
+        $return = array(
+            'status' => 'error'
+        );
+        wp_send_json($return);
+		wp_die();
 
     }
 

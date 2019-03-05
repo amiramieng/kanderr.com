@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
-    <title><?php wp_title(''); ?><?php if(wp_title('', false)) { echo ' :'; } ?> <?php bloginfo('name'); ?></title>
+    <title><?php wp_title(''); ?><?php if (wp_title('', false)) {
+                                        echo ' :';
+                                    } ?> <?php bloginfo('name'); ?></title>
 
     <link href="//www.google-analytics.com" rel="dns-prefetch">
     <link href="<?php echo get_template_directory_uri(); ?>/img/icons/favicon.ico" rel="shortcut icon">
@@ -25,17 +27,17 @@
 
 </head>
 
-<body <?php body_class(); ?>>
+<body <?php body_class(); ?> <?php kanderr_front_page(); ?>>
 
     <!-- container-fluid -->
     <div class="container-fluid no-padding">
 
         <!-- nav -->
         <nav class="navbar header-menu container" role="navigation">
-            <?php //header_nav(); ?>
+            <?php header_nav(); ?>
             <div class="navbar-header">
                 <a class="navbar-brand" href="<?php echo home_url(); ?>">
-                    <?php //echo kanderr_logo(); ?>
+                    <?php  ?>
                 </a>
             </div>
         </nav>
@@ -48,11 +50,11 @@
                 <span class="mobile-menu-bar"></span>
                 <span class="mobile-menu-bar"></span>
             </div>
-            <?php //mobile_nav(); ?>
+            <?php  ?>
         </nav>
         <!-- /nav -->
 
-        <?php if(is_front_page()): ?>
+        <?php if (is_front_page()) : ?>
 
         <div id="video-carousel" class="carousel slide" data-ride="carousel">
 
@@ -85,7 +87,7 @@
         </header>
         <!-- /header -->
 
-        <?php else: ?>
+        <?php else : ?>
 
         <div class="header-image">
             <?php echo kanderr_header(); ?>
@@ -101,4 +103,4 @@
     <!-- /container-fluid -->
 
     <div class="container-fluid no-padding" id="main">
-        <div class="container py-5">
+        <div class="container py-5 ">
