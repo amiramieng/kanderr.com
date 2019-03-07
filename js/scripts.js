@@ -14,6 +14,8 @@ App = {
 		}
 	},
 	videoCarousel: () => {
+		console.log('Video Carousel Initialized.');
+
 		jQuery("#video-carousel").on('slide.bs.carousel', function (evt) {
 
 			const step = jQuery(evt.relatedTarget).index();

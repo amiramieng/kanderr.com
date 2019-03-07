@@ -5,7 +5,7 @@
 			    <div class="container row footer-inner">
 			        <div class="col-md-4">
 			            <h3>Index</h3>
-			            <?php  ?>
+			            <?php footer_nav(); ?>
 			            <h3>Keep In Touch</h3>
 			            <ul class="social-bar">
 			                <li><a href="" title="Facebook"><span class="fab fa-facebook"></span></a></li>
@@ -49,15 +49,14 @@
 			            </form>
 			        </div>
 
-			        <div class="col-md-4">
+			        <div class="col-md-4 kanderr-copy">
 			            <div class="kanderr-footer background-image">
 
 			            </div>
 			            <!-- copyright -->
 			            <p class="copyright">
-			                &copy; <?php echo date('Y'); ?> Copyright <?php bloginfo('name'); ?>.
-			                <?php _e('Designed and developed by', 'html5blank'); ?>
-			                <a href="mailto:amirrami.ce@gmail.com" title="Amir Rami">Amir</a>.
+			                &copy; <?php echo date('Y'); ?> Copyright <a href="mailto:amirrami.ce@gmail.com"
+			                    title="Amir Rami">Amir</a>
 			            </p>
 			            <!-- /copyright -->
 			        </div>

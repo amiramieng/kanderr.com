@@ -10,7 +10,7 @@ function kanderr_logo() {
 
 function kanderr_header() {
   if(is_single() && has_post_thumbnail()) {
-    $header = '<img src="'.get_the_post_thumbnail().'">';
+    $header = '<img src="'.get_the_post_thumbnail_url().'">';
   } else {
     $header = '<img src="'.get_header_image().'">';
   }
@@ -25,7 +25,7 @@ function kanderr_carousel() {
 
   $args = array(
   	'numberposts'	=> -1,
-  	'post_type'		=> 'kanderr-film',
+  	'post_type'		=> 'film',
   );
 
   $loop = new WP_Query($args);
@@ -73,7 +73,7 @@ function kanderr_carousel_captions() {
 
   $args = array(
   	'numberposts'	=> -1,
-  	'post_type'		=> 'kanderr-film',
+  	'post_type'		=> 'film',
   );
 
   $loop = new WP_Query($args);
@@ -115,7 +115,7 @@ function kanderr_carousel_indicators() {
 
   $args = array(
   	'numberposts'	=> -1,
-  	'post_type'		=> 'kanderr-film',
+  	'post_type'		=> 'film',
   );
 
   $loop = new WP_Query($args);

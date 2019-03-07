@@ -213,7 +213,7 @@ class Theme
     public function removeNavMenu($location)
     {
         $this->actionAfterSetup(function () use ($location) {
-            unregister_nav_menu($locations);
+            unregister_nav_menu($location);
         });
         return $this;
     }
@@ -222,6 +222,14 @@ class Theme
     {
         $this->actionAfterSetup(function () use ($handle, $args) {
             register_post_type($handle, $args);
+        });
+        return $this;
+    }
+
+    public function registerTaxonomyForObjectType($taxonomy, $object_type)
+    {
+        $this->actionAfterSetup(function () use ($taxonomy, $object_type) {
+            register_taxonomy_for_object_type($taxonomy, $object_type);
         });
         return $this;
     }

@@ -1,21 +1,18 @@
 <?php
 
-class Support
+function themeCommentTemplate($comment, $args, $depth)
 {
+    $GLOBALS['comment'] = $comment;
+    extract($args, EXTR_SKIP);
 
-    public function themeCommentTemplate($comment, $args, $depth)
-    {
-        $GLOBALS['comment'] = $comment;
-        extract($args, EXTR_SKIP);
-
-        if ('div' == $args['style']) {
-            $tag = 'div';
-            $add_below = 'comment';
-        } else {
-            $tag = 'li';
-            $add_below = 'div-comment';
-        }
-        ?>
+    if ('div' == $args['style']) {
+        $tag = 'div';
+        $add_below = 'comment';
+    } else {
+        $tag = 'li';
+        $add_below = 'div-comment';
+    }
+    ?>
 <!-- heads up: starting < for the html tag (li or div) in the next line: -->
 <<?php echo $tag ?> <?php comment_class(empty($args['has_children']) ? '' : 'parent') ?>
     id="comment-<?php comment_ID() ?>">
@@ -66,6 +63,12 @@ class Support
     <?php
 
 }
+
+function kanderrFrontPage()
+{
+    if (is_front_page()) :
+        echo 'data-front';
+    endif;
 }
 
 function header_nav()
@@ -81,6 +84,47 @@ function header_nav()
             'menu_id'         => '',
             'echo'            => true,
             'fallback_cb'     => 'wp_page_menu',
+            'depth'           => 0,
+            'walker'          => ''
+        )
+    );
+}
+function mobile_nav()
+{
+    wp_nav_menu(
+        array(
+            'theme_location'  => 'mobile-menu',
+            'menu'            => '',
+            'container'       => 'div',
+            'container_class' => 'kanderr-mobile-nav',
+            'container_id'    => '',
+            'menu_class'      => 'menu',
+            'menu_id'         => '',
+            'echo'            => true,
+            'fallback_cb'     => 'wp_page_menu',
+            'before'          => '',
+            'after'           => '',
+            'link_before'     => '',
+            'link_after'      => '',
+            'items_wrap'      => '<ul>%3$s</ul>',
+            'depth'           => 0,
+            'walker'          => ''
+        )
+    );
+}
+function footer_nav()
+{
+    wp_nav_menu(
+        array(
+            'theme_location'  => 'footer-menu',
+            'menu'            => '',
+            'container'       => 'div',
+            'container_class' => 'footer-menu',
+            'container_id'    => '',
+            'menu_class'      => '',
+            'menu_id'         => '',
+            'echo'            => true,
+            'fallback_cb'     => 'wp_page_menu',
             'before'          => '',
             'after'           => '',
             'link_before'     => '',
@@ -92,11 +136,6 @@ function header_nav()
     );
 }
 
-function kanderr_front_page()
-{
-    if (is_front_page()) :
-        echo 'data-front';
-    endif;
-}
+
 
 ?>

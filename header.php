@@ -27,7 +27,7 @@
 
 </head>
 
-<body <?php body_class(); ?> <?php kanderr_front_page(); ?>>
+<body <?php body_class(); ?> <?php kanderrFrontPage(); ?>>
 
     <!-- container-fluid -->
     <div class="container-fluid no-padding">
@@ -50,7 +50,7 @@
                 <span class="mobile-menu-bar"></span>
                 <span class="mobile-menu-bar"></span>
             </div>
-            <?php  ?>
+            <?php mobile_nav(); ?>
         </nav>
         <!-- /nav -->
 

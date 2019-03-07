@@ -18,11 +18,16 @@ class Kanderr extends Theme
 {
     public function __construct()
     {
+        //
         $this->addNavMenus([
             'header-menu' => 'Primary',
+            'mobile-menu' => 'Mobile',
+            'footer-menu' => 'Footer'
         ]);
-        $this->addStyle('kanderr', get_template_directory_uri() . '/css/style.css');
-        $this->addScript('kanderr', get_template_directory_uri() . '/js/scripts.js');
+        //
+        $this->addStyle('kanderr', get_template_directory_uri() . '/css/style.css')
+            ->addScript('kanderr', get_template_directory_uri() . '/js/scripts.js');
+        //
         $this->registerPostType(
             'messages', // Register Custom Post Type
             array(
@@ -45,11 +50,42 @@ class Kanderr extends Theme
                 ), // Go to Dashboard Custom HTML5 Blank post for supports
             )
         );
+        $this->registerPostType(
+            'film',
+            array(
+                'labels' => array(
+                    'name' => __('Films', 'kanderr-theme'), // Rename these to suit
+                    'singular_name' => __('Film', 'kanderr-theme'),
+                    'add_new' => __('Add New', 'kanderr-theme'),
+                    'add_new_item' => __('Add New Film', 'kanderr-theme'),
+                    'edit' => __('Edit', 'kanderr-theme'),
+                    'edit_item' => __('Edit Film', 'kanderr-theme'),
+                    'new_item' => __('New Film', 'kanderr-theme'),
+                    'view' => __('View Film', 'kanderr-theme'),
+                    'view_item' => __('View Film', 'kanderr-theme'),
+                    'search_items' => __('Search Films', 'kanderr-theme'),
+                    'not_found' => __('No Films found', 'kanderr-theme'),
+                    'not_found_in_trash' => __('No Films found in Trash', 'kanderr-theme')
+                ),
+                'public' => true,
+                'hierarchical' => true, // Allows your posts to behave like Hierarchy Pages
+                'menu_icon' => 'dashicons-video-alt',
+                'menu_position' => 5,
+                'has_archive' => false,
+                'supports' => array(
+                    'title',
+                    'editor',
+                    'excerpt',
+                    'thumbnail'
+                ), // Go to Dashboard Custom HTML5 Blank post for supports
+                'can_export' => true, // Allows export in Tools > Export
+            )
+        );
         //
-        $this->addAction('add_meta_boxes', array($this, 'kanderr_messages_add_meta_box'));
-        $this->addAction('save_post', array($this, 'kanderr_save_contact_email_data'));
-        $this->addAction('manage_messages_posts_custom_column', array($this, 'kanderr_messages_custom_column'), 10, 2);
-        $this->addAction('admin_enqueue_scripts', array($this, 'kanderr_admin_scripts'));
+        $this->addAction('add_meta_boxes', array($this, 'kanderr_messages_add_meta_box'))
+            ->addAction('save_post', array($this, 'kanderr_save_contact_email_data'))
+            ->addAction('manage_messages_posts_custom_column', array($this, 'kanderr_messages_custom_column'), 10, 2)
+            ->addAction('admin_enqueue_scripts', array($this, 'kanderr_admin_scripts'));
         //
         $this->addFilter('manage_messages_posts_columns', array($this, 'kanderr_set_messages_columns'));
     }
@@ -122,17 +158,14 @@ class Kanderr extends Theme
         update_post_meta($post_id, '_contact_email_value_key', $my_data);
     }
 
-    public function kanderr_admin_scripts($hook) {
+    public function kanderr_admin_scripts($hook)
+    {
 
         if ('' === $hook) {
             wp_register_script('scriptname', get_template_directory_uri() . '/js/scriptname.js', array('jquery'), '1.0.0'); // Conditional script(s)
             wp_enqueue_script('scriptname'); // Enqueue it!
         }
-        
     }
-
-    
-    
 }
 
 $theme = new Theme;
