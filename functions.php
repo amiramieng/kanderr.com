@@ -122,9 +122,10 @@ class Kanderr extends Theme
         );
         //
         $this->addAction('add_meta_boxes', array($this, 'kanderr_messages_add_meta_box'))
-            ->addAction('save_post', array($this, 'kanderr_save_contact_email_data'))
-            ->addAction('manage_messages_posts_custom_column', array($this, 'kanderr_messages_custom_column'), 10, 2)
-            ->addAction('admin_enqueue_scripts', array($this, 'kanderr_admin_scripts'));
+        ->addAction('save_post', array($this, 'kanderr_save_contact_email_data'))
+        ->addAction('manage_messages_posts_custom_column', array($this, 'kanderr_messages_custom_column'), 10, 2)
+        ->addAction('admin_enqueue_scripts', array($this, 'kanderr_admin_scripts'))
+        ->addAction('template_redirect', array($this, 'kanderr_remove_wp_archives'));
         //
         $this->addFilter('manage_messages_posts_columns', array($this, 'kanderr_set_messages_columns'))
         ->addFilter('embed_oembed_html', array($this, 'wrap_embedded_media'), 10, 3)
@@ -247,6 +248,14 @@ class Kanderr extends Theme
         return $fields;
     }
 
+    /* Remove archives */
+    public function kanderr_remove_wp_archives(){
+        //If we are on category or tag or date or author archive
+        if( is_category() || is_tag() || is_date() || is_author() ) {
+            wp_redirect( home_url() );
+            exit;
+        }
+    }
 
 }
 

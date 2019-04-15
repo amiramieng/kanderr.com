@@ -4,9 +4,9 @@
 
 	<main role="main" class="container">
 		<!-- section -->
-		<section>
+		<section class="theme-section">
 
-			<h1><?php _e( 'Projects', 'kanderr-theme' ); ?></h1>
+			<h1 class="theme-section-h1"><?php _e( 'Projects', 'kanderr-theme' ); ?></h1>
 
 			<?php get_template_part('template-parts/loop'); ?>
 

@@ -240,9 +240,11 @@ function kanderr_team() {
             <div class="team-member" data-aos="fade-up" id="">
                 <div class="team-member-container"><img src="<?php the_post_thumbnail(); ?>"></div>
                 <div class="team-member-overlay">
-                    <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-                    <div class="team-member-role">
-                         <?php the_tags( '', ' / ', '' ); ?>
+                    <div class="team-member-meta">
+                        <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+                        <div class="team-member-role">
+                             <?php the_tags( '', ' / ', '' ); ?>
+                        </div>
                     </div>
                 </div>
             </div>
