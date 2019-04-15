@@ -12,6 +12,13 @@ class Theme
         });
     }
 
+    private function actionAfterInit($function)
+    {
+        add_action('init', function () use ($function) {
+            $function();
+        });
+    }
+
     private function actionEnqueueScripts($function)
     {
         add_action('wp_enqueue_scripts', function () use ($function) {
@@ -32,8 +39,8 @@ class Theme
         $this
             // Registers theme support for a given feature.
             ->addSupport('title-tag')
-            ->addSupport('custom-logo')
-            ->addSupport('custom_header')
+            //->addSupport('custom-logo')
+            //->addSupport('custom_header')
             ->addSupport('menus')
             ->addSupport('automatic-feed-links')
             ->addSupport('post-thumbnails')
@@ -220,7 +227,7 @@ class Theme
 
     public function registerPostType($handle, $args)
     {
-        $this->actionAfterSetup(function () use ($handle, $args) {
+        $this->actionAfterInit(function () use ($handle, $args) {
             register_post_type($handle, $args);
         });
         return $this;
@@ -228,7 +235,7 @@ class Theme
 
     public function registerTaxonomyForObjectType($taxonomy, $object_type)
     {
-        $this->actionAfterSetup(function () use ($taxonomy, $object_type) {
+        $this->actionAfterInit(function () use ($taxonomy, $object_type) {
             register_taxonomy_for_object_type($taxonomy, $object_type);
         });
         return $this;
@@ -250,4 +257,3 @@ class Theme
         return $this;
     }
 }
- 

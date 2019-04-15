@@ -1,17 +1,9 @@
 <!-- article -->
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-
-    <!-- post thumbnail -->
-    <?php if ( has_post_thumbnail()) : // Check if Thumbnail exists ?>
-        <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
-            <?php the_post_thumbnail(); // Fullsize image for the single post ?>
-        </a>
-    <?php endif; ?>
-    <!-- /post thumbnail -->
+<article id="post-<?php the_ID(); ?>" <?php post_class('single'); ?>>
 
     <!-- post title -->
-    <h1>
-        <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a>
+    <h1 class="single-title">
+        <?php the_title(); ?>
     </h1>
     <!-- /post title -->
 
@@ -21,7 +13,9 @@
     <span class="comments"><?php if (comments_open( get_the_ID() ) ) comments_popup_link( __( 'Leave your thoughts', 'html5blank' ), __( '1 Comment', 'html5blank' ), __( '% Comments', 'html5blank' )); ?></span>
     <!-- /post details -->
 
-    <?php the_content(); // Dynamic Content ?>
+    <div class="single-content">
+        <?php the_content(); // Dynamic Content ?>
+    </div>
 
     <?php the_tags( __( 'Tags: ', 'html5blank' ), ', ', '<br>'); // Separated by commas with a line break at the end ?>
 

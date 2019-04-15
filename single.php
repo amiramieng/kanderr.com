@@ -1,29 +1,31 @@
 <?php get_header(); ?>
 
-	<main role="main">
+<main role="main">
 	<!-- section -->
-	<section>
+	<section class="container">
 
-	<?php if (have_posts()): while (have_posts()) : the_post(); ?>
+		<?php if (have_posts()): ?>
 
-		<?php get_template_part('template-parts/single', get_post_type()); ?>
+			<?php while (have_posts()) : the_post(); ?>
 
-	<?php endwhile; ?>
+				<?php get_template_part('template-parts/single', get_post_type()); ?>
 
-	<?php else: ?>
+			<?php endwhile; ?>
 
-		<!-- article -->
-		<article>
+		<?php else: ?>
 
-			<h1><?php _e( 'Sorry, nothing to display.', 'html5blank' ); ?></h1>
+			<!-- article -->
+			<article>
 
-		</article>
-		<!-- /article -->
+				<h1><?php _e( 'Sorry, nothing to display.', 'kanderr-theme' ); ?></h1>
 
-	<?php endif; ?>
+			</article>
+			<!-- /article -->
+
+		<?php endif; ?>
 
 	</section>
 	<!-- /section -->
-	</main>
+</main>
 
 <?php get_footer(); ?>

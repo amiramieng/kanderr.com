@@ -10,7 +10,7 @@ class Ajax
     }
 
     public function kanderr_contact_me() {
-    
+
         $name = sanitize_text_field($_POST['name']);
         $email = sanitize_text_field($_POST['email']);
         $message = sanitize_text_field($_POST['message']);
@@ -42,7 +42,7 @@ class Ajax
                 'status' => 'success',
                 'ID' => $postID
             );
-            
+
             wp_send_json($return);
             wp_die();
         }

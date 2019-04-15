@@ -1,10 +1,12 @@
-<?php /* Template Name: Blog */ get_header(); ?>
+<?php /* Template Name: News */ get_header(); ?>
+
+<?php query_posts('post_type=post&cat=news'); ?>
 
 	<main role="main" class="container">
 		<!-- section -->
 		<section>
 
-			<h1><?php _e( 'Latest Posts', 'html5blank' ); ?></h1>
+			<h1><?php _e( 'News', 'kanderr-theme' ); ?></h1>
 
 			<?php get_template_part('template-parts/loop'); ?>
 

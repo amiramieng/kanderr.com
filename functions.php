@@ -25,8 +25,11 @@ class Kanderr extends Theme
             'footer-menu' => 'Footer'
         ]);
         //
-        $this->addStyle('kanderr', get_template_directory_uri() . '/css/style.css')
-            ->addScript('kanderr', get_template_directory_uri() . '/js/scripts.js');
+        $this
+        ->addStyle('kanderr', get_template_directory_uri() . '/css/style.css')
+        ->addStyle('aos', get_template_directory_uri() . '/css/aos.css')
+        ->addScript('kanderr', get_template_directory_uri() . '/js/scripts.js')
+        ->addScript('aos', get_template_directory_uri() . '/js/lib/aos.js');
         //
         $this->registerPostType(
             'messages', // Register Custom Post Type
@@ -80,6 +83,42 @@ class Kanderr extends Theme
                 ), // Go to Dashboard Custom HTML5 Blank post for supports
                 'can_export' => true, // Allows export in Tools > Export
             )
+        )
+        ->registerTaxonomyForObjectType('post_tag', 'messages')
+        ->registerPostType(
+            'team', // Register Custom Post Type
+            array(
+                'labels' => array(
+                    'name' => __('Team', 'kanderr-theme'), // Rename these to suit
+                    'singular_name' => __('Team', 'kanderr-theme'),
+                    'add_new' => __('Add New', 'kanderr-theme'),
+                    'add_new_item' => __('Add New Team Member', 'kanderr-theme'),
+                    'edit' => __('Edit', 'kanderr-theme'),
+                    'edit_item' => __('Edit Team Member', 'kanderr-theme'),
+                    'new_item' => __('New Team Member', 'kanderr-theme'),
+                    'view' => __('View Team', 'kanderr-theme'),
+                    'view_item' => __('View Team Member', 'kanderr-theme'),
+                    'search_items' => __('Search Team Members', 'kanderr-theme'),
+                    'not_found' => __('No Team Members found', 'kanderr-theme'),
+                    'not_found_in_trash' => __('No Team Members found in Trash', 'kanderr-theme')
+                ),
+                'public' => true,
+                'hierarchical' => false, // Allows your posts to behave like Hierarchy Pages
+                'has_archive' => false,
+                'supports' => array(
+                    'title',
+                    'editor',
+                    'excerpt',
+                    'thumbnail'
+                ), // Go to Dashboard Custom HTML5 Blank post for supports
+                'can_export' => true, // Allows export in Tools > Export
+                'taxonomies' => array(
+                    // 'category',
+                    'post_tag'
+                ), // Add Category and Post Tags support
+                'menu_position' => 20,
+                'menu_icon' => 'dashicons-groups'
+            )
         );
         //
         $this->addAction('add_meta_boxes', array($this, 'kanderr_messages_add_meta_box'))
@@ -87,7 +126,12 @@ class Kanderr extends Theme
             ->addAction('manage_messages_posts_custom_column', array($this, 'kanderr_messages_custom_column'), 10, 2)
             ->addAction('admin_enqueue_scripts', array($this, 'kanderr_admin_scripts'));
         //
-        $this->addFilter('manage_messages_posts_columns', array($this, 'kanderr_set_messages_columns'));
+        $this->addFilter('manage_messages_posts_columns', array($this, 'kanderr_set_messages_columns'))
+        ->addFilter('embed_oembed_html', array($this, 'wrap_embedded_media'), 10, 3)
+        ->addFilter('avatar_defaults', array($this, 'kanderr_avatar_defaults'))
+        ->addFilter( 'comment_form_default_fields', array($this, 'kanderr_comment_form_fields'))
+        ->addFilter( 'comment_form_defaults', array($this, 'kanderr_comment_form_defaults'))
+        ;
     }
 
 
@@ -166,6 +210,44 @@ class Kanderr extends Theme
             wp_enqueue_script('scriptname'); // Enqueue it!
         }
     }
+
+    public function wrap_embedded_media($html, $url, $attr)
+    {
+        return '<div class="embed-16by9">' . $html . '</div>';
+    }
+
+    public function kanderr_avatar_defaults($avatar_defaults) {
+        $myavatar = get_template_directory_uri() . '/img/kanderr-footer.png';
+        $avatar_defaults[$myavatar] = "Kanderr Avatar";
+        return $avatar_defaults;
+    }
+
+    public function kanderr_comment_form_defaults($defaults)
+    {
+        $defaults['title_reply'] = __( 'Add Your Story' );
+        $defaults['label_submit'] = __( 'Submit Story', 'custom' );
+	    return $defaults;
+    }
+
+    public function kanderr_comment_form_fields($fields) {
+        // var_dump($fields);
+
+        unset($fields['author']);
+        unset($fields['email']);
+        unset($fields['url']);
+
+        $fields['author'] = '<p class="comment-form-author"><label for="author">' . __( 'Name', 'kanderr-theme' ) . ' <span class="required">*</span></label><input id="author" name="author" type="text" value="" size="30"></p>';
+
+        $fields['email'] = '<p class="comment-form-email"><label for="email">' . __( 'Email', 'kanderr-theme' ) . ' <span class="required">*</span></label> ' .
+        '<input id="email" name="email" type="text" value="" size="30"></p>';
+
+        $fields['url'] = '<p class="comment-form-url"><label for="url">' . __( 'Website', 'kanderr-theme' ) . ' <span class="required">*</span></label> ' .
+        '<input id="url" name="url" type="text" value="" size="30"></p>';
+
+        return $fields;
+    }
+
+
 }
 
 $theme = new Theme;

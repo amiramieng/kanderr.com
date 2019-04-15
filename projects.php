@@ -1,10 +1,12 @@
-<?php /* Template Name: Blog */ get_header(); ?>
+<?php /* Template Name: Projects */ get_header(); ?>
+
+<?php query_posts('post_type=film&cat=project'); ?>
 
 	<main role="main" class="container">
 		<!-- section -->
 		<section>
 
-			<h1><?php _e( 'Latest Posts', 'html5blank' ); ?></h1>
+			<h1><?php _e( 'Projects', 'kanderr-theme' ); ?></h1>
 
 			<?php get_template_part('template-parts/loop'); ?>
 

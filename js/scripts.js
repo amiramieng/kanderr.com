@@ -5,21 +5,103 @@ App = {
 	init: () => {
 		console.log('Kanderr initialized!');
 
+		AOS.init();
 		App.contactAJAX();
 		App.frontPageInit();
+		App.testConnection();
 	},
 	frontPageInit: () => {
 		if (document.body.dataset.front !== undefined) {
+			//jQuery('body').css('overflow-y', 'hidden');
+			//jQuery('.nav-toggler').css('display', 'none');
+
 			App.videoCarousel();
+			App.kanderrNavbar();
+			// App.kanderrPreloader();
 		}
+	},
+	testConnection: () => {
+		// Network Information object
+		var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+		// initialize
+		if (connection) {
+			connection.addEventListener("change", App.bandwidthChange());
+			// App.bandwidthChange();
+		}
+	},
+	highBandwidth: () => {
+		var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+		console.log(conn);
+		return !conn.metered && conn.downlink > 2
+	},
+	bandwidthChange: () => {
+
+		var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+		// var body = document.body;
+		//
+		// if (highBandwidth) {
+		// 	body.classList.add("hibw");
+		// }
+		// else {
+		// 	body.classList.remove("hibw");
+		// }
+
+		// console.group('Connection Test');
+		console.info(
+			"switching to " +
+			(App.highBandwidth ? "high" : "low") +
+			" bandwidth mode"
+		);
+		// Network type that browser uses
+		console.log('         type: ' + connection.type);
+		// Effective bandwidth estimate
+		console.log('     downlink: ' + connection.downlink + 'Mb/s');
+		// Effective round-trip time estimate
+		console.log('          rtt: ' + connection.rtt + 'ms');
+		// Upper bound on the downlink speed of the first network hop
+		console.log('  downlinkMax: ' + connection.downlinkMax + 'Mb/s');
+		// Effective connection type determined using a combination of recently
+		// observed rtt and downlink values: ' +
+		console.log('effectiveType: ' + connection.effectiveType);
+		// True if the user has requested a reduced data usage mode from the user
+		// agent.
+		console.log('     saveData: ' + connection.saveData);
+		// console.groupEnd('Connection Test');
+
+	},
+	kanderrPreloader: () => {
+		jQuery(window).load(function() {
+			setTimeout(() => {
+				jQuery("#preloader").fadeOut("slow");
+				// jQuery('body').css('overflow-y', 'auto');
+				// jQuery('.nav-toggler').css('display', 'block');
+			}, 2000);
+		})
+	},
+	kanderrNavbar: () => {
+		let scrollTop = 0;
+		jQuery(window).on('scroll', function() {
+			jQuery('.navbar-container').toggleClass('scroll', jQuery(window).scrollTop() <= scrollTop && jQuery(window).scrollTop() > 0 && jQuery(window).width() > 768);
+			scrollTop = jQuery(window).scrollTop();
+		})
 	},
 	videoCarousel: () => {
 		console.log('Video Carousel Initialized.');
+
+		if (!App.highBandwidth) {
+			jQuery('.view.view-kanderr').css('display', 'none');
+		} else {
+			jQuery('.view.view-kanderr').css('display', 'block');
+		}
+
+		jQuery('#caption-0').addClass('active');
 
 		jQuery("#video-carousel").on('slide.bs.carousel', function (evt) {
 
 			const step = jQuery(evt.relatedTarget).index();
 			let index;
+			let next;
 
 			if (step == 0) {
 				index = jQuery(this).find('.hide.index').data('index') - 1;
@@ -27,13 +109,23 @@ App = {
 				index = step - 1;
 			}
 
+			if (step == jQuery(this).find('.hide.index').data('index') - 1) {
+				next = 0;
+			} else {
+				next = step + 1;
+			}
+
+			console.log(index, step);
+
 			jQuery('#video-' + index).get(0).pause();
 			jQuery('#video-' + index).get(0).currentTime = 0;
 			jQuery('#video-' + step).get(0).play();
 
-
-			jQuery('#carousel-captions .carousel-caption:not(#caption-' + step + ')').css('display', 'none');
-			jQuery('#caption-' + step).css('display', 'block');
+			// jQuery('#caption-' + index).removeClass('active');
+			// jQuery('#caption-' + index).addClass('past');
+			jQuery('#caption-' + step).addClass('active');
+			jQuery('#carousel-captions .carousel-caption:not(#caption-' + step + ')').removeClass('active');
+			// jQuery('#caption-' + next).removeClass('past');
 
 			jQuery('.carousel-indicators').find('#indicator-' + index).removeClass('active');
 			jQuery('.carousel-indicators').find('#indicator-' + step).addClass('active');

@@ -29,9 +29,24 @@
 
 <body <?php body_class(); ?> <?php kanderrFrontPage(); ?>>
 
-    <header class="header clear" role="banner">
+    <div id="preloader" class="d-none">
+        <div class="preloader-container">
+            <img id="preloader-img-1" class="d-none" src="<?php echo get_template_directory_uri(); ?>/img/preloader-img-1.png">
+            <img id="preloader-img-2" class="d-none" src="<?php echo get_template_directory_uri(); ?>/img/preloader-img-2.png">
+            <img id="preloader-logo" src="<?php echo get_template_directory_uri(); ?>/img/preloader-logo.png">
+        </div>
+    </div>
 
-        <div class="navbar-container front">
+    <div id="video-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+
+        <?php kanderr_carousel(); ?>
+
+    </div>
+
+    <!-- header -->
+    <header class="header header-front clear" role="banner">
+
+        <div class="navbar-container">
             <!-- nav -->
             <nav class="navbar container" role="navigation">
                 <input type="checkbox" id="nav" class="d-none">
@@ -65,4 +80,24 @@
             <!-- /nav -->
         </div>
 
+        <div class="kanderr-captions-container">
+            <div class="container kanderr-captions">
+                <div id="carousel-captions">
+                    <?php kanderr_carousel_captions(); ?>
+                </div>
+            </div>
+        </div>
+
+        <?php kanderr_carousel_indicators(); ?>
+
+        <a class="carousel-control-prev" href="#video-carousel" role="button" data-slide="prev">
+            <span class="fas fa-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#video-carousel" role="button" data-slide="next">
+            <span class="fas fa-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+
     </header>
+    <!-- /header -->
