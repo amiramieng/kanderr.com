@@ -1,6 +1,6 @@
 <?php /* Template Name: Projects */ get_header(); ?>
 
-<?php query_posts('post_type=film&cat=project'); ?>
+<?php query_posts( 'post_type=post&cat=project' ); ?>
 
 	<main role="main" class="container">
 		<!-- section -->
@@ -8,7 +8,7 @@
 
 			<h1 class="theme-section-h1"><?php _e( 'Projects', 'kanderr-theme' ); ?></h1>
 
-			<?php get_template_part('template-parts/loop'); ?>
+			<?php get_template_part( 'template-parts/loop' ); ?>
 
 			<?php //get_template_part('template-parts/pagination'); ?>
 

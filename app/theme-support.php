@@ -1,5 +1,7 @@
 <?php
 
+
+
 function kanderr_logo() {
     $custom_logo_id = get_theme_mod( 'custom_logo' );
     $image = wp_get_attachment_image_src( $custom_logo_id , 'full' );
@@ -37,7 +39,9 @@ function kanderr_carousel() {
             if(have_rows('carousel')):
                 while(have_rows('carousel')): the_row();
 
-                if(get_sub_field('carousel_condition') == true && get_sub_field('carousel_segment') !== '') {
+                $detect = new Mobile_Detect;
+
+                if(get_sub_field('carousel_condition') == true && get_sub_field('carousel_segment') !== '' && get_sub_field('carousel_segment_fallback') !== '') {
 
                     if($i == 0) {
                         $carouselInner .= '<div class="carousel-item active">';
@@ -45,10 +49,19 @@ function kanderr_carousel() {
                         $carouselInner .= '<div class="carousel-item">';
                     }
 
+                    $carouselInner .= '<div class="view view-kanderr-fallback">';
+                    $carouselInner .= '<img src="'.get_sub_field('carousel_segment_fallback').'">';
+                    $carouselInner .= '</div>';
+
                     $carouselInner .= '<div class="view view-kanderr">';
-                    $carouselInner .= '<video id="video-'.$i.'" class="video-fluid" autoplay loop muted>';
-                    $carouselInner .= '<source src="'.get_sub_field('carousel_segment').'" type="video/mp4">';
-                    $carouselInner .= '</video></div></div>';
+
+                    if (!$detect->isiOS()) {
+                        $carouselInner .= '<video id="video-'.$i.'" class="video-fluid" autoplay loop muted>';
+                        $carouselInner .= '<source src="'.get_sub_field('carousel_segment').'" type="video/mp4">';
+                        $carouselInner .= '</video>';
+                    }
+
+                    $carouselInner .= '</div></div>';
 
                     $i++;
 
@@ -169,7 +182,7 @@ function kanderr_get_embedded_media($type = array())
 
 function kanderr_carousel_excerpt($length)
 {
-    return 20;
+    return 15;
 }
 
 function kanderr_recent_films_excerpt($length)

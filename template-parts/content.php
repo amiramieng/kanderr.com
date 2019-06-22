@@ -1,5 +1,5 @@
 <!-- article -->
-<article id="post-<?php the_ID(); ?>" <?php post_class(array('content', 'col-md-4', 'col-lg-3')); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class(array('content')); ?>>
 
     <div class="content-thumb">
         <?php if(has_post_thumbnail()): ?>

@@ -1,6 +1,6 @@
 <?php if (have_posts()): ?>
 
-	<div class="row">
+	<div class="loop-container">
 
 	<?php while (have_posts()) : the_post(); ?>
 

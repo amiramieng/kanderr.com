@@ -15,6 +15,12 @@ App = {
 			//jQuery('body').css('overflow-y', 'hidden');
 			//jQuery('.nav-toggler').css('display', 'none');
 
+			var md = new MobileDetect(window.navigator.userAgent);
+
+			if(md.os() == 'iOS') {
+				jQuery('.logo').css('display', 'none');
+			}
+
 			App.videoCarousel();
 			App.kanderrNavbar();
 			// App.kanderrPreloader();
@@ -87,12 +93,15 @@ App = {
 		})
 	},
 	videoCarousel: () => {
+		var md = new MobileDetect(window.navigator.userAgent);
 		console.log('Video Carousel Initialized.');
 
-		if (!App.highBandwidth) {
+		if (!App.highBandwidth || md.os() == 'iOS') {
 			jQuery('.view.view-kanderr').css('display', 'none');
+			jQuery('.view.view-kanderr-fallback').css('display', 'flex');
 		} else {
 			jQuery('.view.view-kanderr').css('display', 'block');
+			jQuery('.view.view-kanderr-fallback').css('display', 'none');
 		}
 
 		jQuery('#caption-0').addClass('active');
@@ -115,11 +124,14 @@ App = {
 				next = step + 1;
 			}
 
-			console.log(index, step);
+			// console.log(index, step);
 
-			jQuery('#video-' + index).get(0).pause();
-			jQuery('#video-' + index).get(0).currentTime = 0;
-			jQuery('#video-' + step).get(0).play();
+			if(md.os() != 'iOS') {
+				jQuery('#video-' + index).get(0).pause();
+				jQuery('#video-' + index).get(0).currentTime = 0;
+				jQuery('#video-' + step).get(0).play();
+			}
+
 
 			// jQuery('#caption-' + index).removeClass('active');
 			// jQuery('#caption-' + index).addClass('past');
